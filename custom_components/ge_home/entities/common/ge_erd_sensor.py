@@ -101,10 +101,10 @@ class GeErdSensor(GeErdEntity, SensorEntity):
 
     @property
     def _temp_units(self) -> Optional[str]:
-        #based on testing, all API values are in Fahrenheit, so we'll redefine
-        #this property to be the configured temperature unit and set the native
-        #unit differently
-        return self.api.hass.config.units.temperature_unit
+        try:
+            return self.api.hass.config.units.temperature_unit
+        except AttributeError:
+            return UnitOfTemperature.FAHRENHEIT
 
         #if self._measurement_system == ErdMeasurementUnits.METRIC:
         #    return UnitOfTemperature.CELSIUS

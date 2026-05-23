@@ -3,6 +3,7 @@ import logging
 from collections.abc import Collection
 from typing import Callable
 
+from homeassistant.components.binary_sensor import BinarySensorEntity
 from homeassistant.components.switch import SwitchEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
@@ -31,7 +32,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, asyn
             entity
             for api in apis
             for entity in api.entities
-            if isinstance(entity, GeErdBinarySensor) and not isinstance(entity, SwitchEntity)
+            if isinstance(entity, BinarySensorEntity) and not isinstance(entity, SwitchEntity)
             if not registry.async_is_registered(entity.entity_id)
         ]
         _LOGGER.debug(f'Found {len(entities):d} unregistered binary sensors to register')

@@ -3,6 +3,7 @@ import logging
 from collections.abc import Collection
 from typing import Callable
 
+from homeassistant.components.select import SelectEntity
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
@@ -31,8 +32,11 @@ async def async_setup_entry(
             entity
             for api in apis
             for entity in api.entities
-            if isinstance(entity, GeErdSelect)
-            and entity.erd_code in api.appliance._property_cache
+            if isinstance(entity, SelectEntity)
+            # GeErdSelect entities require the ERD code to have been reported by
+            # the appliance before they are registered.  Non-ERD selects (e.g.
+            # GeCcmBrewModeSelect) have no ERD code and are always included.
+            if not isinstance(entity, GeErdSelect) or entity.erd_code in api.appliance._property_cache
             if not registry.async_is_registered(entity.entity_id)
         ]
         _LOGGER.debug(f"Found {len(entities):d} unregistered selects to register")

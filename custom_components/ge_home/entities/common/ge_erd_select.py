@@ -40,7 +40,10 @@ class GeErdSelect(GeErdEntity, SelectEntity):
 
     @property
     def current_option(self) -> str | None: # type: ignore
-        return self._converter.to_option_string(self.appliance.get_erd_value(self.erd_code))
+        try:
+            return self._converter.to_option_string(self.appliance.get_erd_value(self.erd_code))
+        except KeyError:
+            return None
 
     @cached_property
     def options(self) -> List[str]:

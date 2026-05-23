@@ -57,6 +57,11 @@ class GeErdEntity(GeEntity):
             erd_string = self._erd_override
 
         erd_title = " ".join(erd_string.split("_")).title()
+
+        # When has_entity_name is True, HA prepends the device name automatically,
+        # so return only the descriptive part without the serial/MAC prefix.
+        if self._attr_has_entity_name:
+            return erd_title
         return f"{self.serial_or_mac} {erd_title}"
 
     @cached_property

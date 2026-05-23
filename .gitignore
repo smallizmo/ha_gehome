@@ -134,3 +134,9 @@ dmypy.json
 
 # Secrets
 */secrets.py
+
+# macOS
+.DS_Store
+
+# Local development / debug scripts (may contain credentials)
+brew_test.py
