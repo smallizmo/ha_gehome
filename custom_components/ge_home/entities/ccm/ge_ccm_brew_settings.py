@@ -1,16 +1,24 @@
+import logging
+import traceback
 from gehomesdk import ErdCode
 from ...devices import ApplianceApi
 from ..common import GeErdButton
 
+_LOGGER = logging.getLogger(__name__)
+
 class GeCcmBrewSettingsButton(GeErdButton):
+    _attr_has_entity_name = True
     def __init__(self, api: ApplianceApi):
-        super().__init__(api, erd_code=ErdCode.CCM_BREW_SETTINGS)
+        super().__init__(api, erd_code=ErdCode.CCM_BREW_SETTINGS, erd_override="Start Brew")
 
     async def async_press(self) -> None:
         """Handle the button press."""
 
         from ...devices import CcmApi
 
-        # Forward the call up to the Coffee Maker device to handle
         if isinstance(self.api, CcmApi):
-            await self.api.start_brewing()
+            try:
+                await self.api.start_brewing()
+            except Exception:
+                _LOGGER.error("start_brewing failed:\n%s", traceback.format_exc())
+                raise

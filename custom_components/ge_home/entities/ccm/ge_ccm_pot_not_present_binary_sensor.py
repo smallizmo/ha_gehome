@@ -1,6 +1,7 @@
 from ..common import GeErdBinarySensor
 
 class GeCcmPotNotPresentBinarySensor(GeErdBinarySensor):
+    _attr_has_entity_name = True
     @property
     def is_on(self) -> bool: # type: ignore
         """Return True if entity is not pot present."""
