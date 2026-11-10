@@ -167,6 +167,7 @@ class CcmApi(ApplianceApi):
         for svc in data.get("services", []):
             if svc.get("serviceType") == "cloud.smarthq.service.coffeebrewer.v2":
                 state = svc.get("state", {})
+                _LOGGER.debug("async_refresh_dt_state: full DT state keys=%s values=%s", list(state.keys()), state)
 
                 new_out_of_beans: bool = bool(state.get("outOfBeans", False))
                 if new_out_of_beans != self._dt_out_of_beans:
